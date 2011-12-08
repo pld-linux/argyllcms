@@ -1,26 +1,25 @@
-# NOTE: for newer versions of hargyllcms fork see hargyllcms.spec
-%define		alphatag	20100201
-%define		rel			0.3
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	1.1.0
-Release:	0.2.%{alphatag}git.%{rel}
+Version:	1.3.5
+Release:	1
 License:	GPL v3 and MIT
-Group:		X11
-#Source0:   http://people.freedesktop.org/~hughsient/releases/hargyllcms-%{version}-%{?alphatag}.tar.gz
-Source0:	http://pkgs.fedoraproject.org/repo/pkgs/argyllcms/h%{name}-%{version}-%{alphatag}.tar.gz/59cdfbefa1c905967b0848634c2fb509/hargyllcms-%{version}-%{alphatag}.tar.gz
-# Source0-md5:	59cdfbefa1c905967b0848634c2fb509
+Group:		X11/Applications/Graphics
+Source0:	http://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
+# Source0-md5:	e1c51b73cfbf309099340c73b5c4ad10
 URL:		http://www.argyllcms.com/
 BuildRequires:	libtiff-devel
-BuildRequires:	libusb-devel
+BuildRequires:	libusb-devel >= 1.0.0
+BuildRequires:	pkgconfig
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
-Requires:	udev-core
+BuildRequires:	xz
+BuildRequires:	yajl-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -56,6 +55,20 @@ konwersji kolorów, a także obsługę szybkiej, dokładniej 16-bitowej
 konwersji. Podzbiór kolorów urządzeń można oglądać i porównywać przy
 użyciu przeglądarki VRML.
 
+%package -n udev-argyllcms
+Summary:	Udev rules for color measurement devices supported by Argyll CMS
+Summary(pl.UTF-8):	Reguły Udev dla urządzeń mierzących kolory obsługiwanych przez Argyll CMS
+Group:		Base
+Requires:	%{name} = %{version}-%{release}
+Requires:	udev-core
+
+%description -n udev-argyllcms
+Udev rules for color measurement devices supported by Argyll CMS.
+
+%description -n udev-argyllcms -l pl.UTF-8
+Reguły Udev dla urządzeń mierzących kolory obsługiwanych przez Argyll
+CMS.
+
 %package doc
 Summary:	Argyll CMS documentation
 Summary(pl.UTF-8):	Dokumentacja systemu Argyll CMS
@@ -80,11 +93,7 @@ Ten pakiet zawiera dokumentację do systemu zarządzania kolorami
 Argyll.
 
 %prep
-#%setup -q -n hargyllcms-%{version}
-%setup -q -n h%{name}-%{?version}-%{?alphatag}
-
-# we're not allowed to refer to acquisition devices as scanners
-./legal.sh
+%setup -q -n h%{name}-%{version}
 
 %build
 %configure
@@ -98,18 +107,65 @@ rm -rf $RPM_BUILD_ROOT
 # they shouldn't put Makefile.am to ref_DATA
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/color/argyll/ref/Makefile.am
 
+%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/argyll
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc *.txt
-%attr(755,root,root) %{_bindir}/*
+%doc AUTHORS Readme.txt log.txt ttbd.txt
+%attr(755,root,root) %{_bindir}/applycal
+%attr(755,root,root) %{_bindir}/average
+%attr(755,root,root) %{_bindir}/cb2ti3
+%attr(755,root,root) %{_bindir}/ccttest
+%attr(755,root,root) %{_bindir}/chartread
+%attr(755,root,root) %{_bindir}/collink
+%attr(755,root,root) %{_bindir}/colprof
+%attr(755,root,root) %{_bindir}/dispcal
+%attr(755,root,root) %{_bindir}/dispread
+%attr(755,root,root) %{_bindir}/dispwin
+%attr(755,root,root) %{_bindir}/extracticc
+%attr(755,root,root) %{_bindir}/extractttag
+%attr(755,root,root) %{_bindir}/fakeCMY
+%attr(755,root,root) %{_bindir}/fakeread
+%attr(755,root,root) %{_bindir}/iccdump
+%attr(755,root,root) %{_bindir}/iccgamut
+%attr(755,root,root) %{_bindir}/icclu
+%attr(755,root,root) %{_bindir}/icctest
+%attr(755,root,root) %{_bindir}/invprofcheck
+%attr(755,root,root) %{_bindir}/kodak2ti3
+%attr(755,root,root) %{_bindir}/mppcheck
+%attr(755,root,root) %{_bindir}/mpplu
+%attr(755,root,root) %{_bindir}/mppprof
+%attr(755,root,root) %{_bindir}/pathplot
+%attr(755,root,root) %{_bindir}/printcal
+%attr(755,root,root) %{_bindir}/printtarg
+%attr(755,root,root) %{_bindir}/profcheck
+%attr(755,root,root) %{_bindir}/refine
+%attr(755,root,root) %{_bindir}/revfix
+%attr(755,root,root) %{_bindir}/scanin
+%attr(755,root,root) %{_bindir}/sepgen
+%attr(755,root,root) %{_bindir}/simpprof
+%attr(755,root,root) %{_bindir}/spec2cie
+%attr(755,root,root) %{_bindir}/specplot
+%attr(755,root,root) %{_bindir}/splitti3
+%attr(755,root,root) %{_bindir}/spotread
+%attr(755,root,root) %{_bindir}/spyd2en
+%attr(755,root,root) %{_bindir}/synthcal
+%attr(755,root,root) %{_bindir}/synthread
+%attr(755,root,root) %{_bindir}/targen
+%attr(755,root,root) %{_bindir}/tiffgamut
+%attr(755,root,root) %{_bindir}/txt2ti3
+%attr(755,root,root) %{_bindir}/verify
+%attr(755,root,root) %{_bindir}/viewgam
+%attr(755,root,root) %{_bindir}/xicclu
 %dir %{_datadir}/color/argyll
 %{_datadir}/color/argyll/ref
-/lib/udev/rules.d/55-Argyll.rules
 
-%exclude %{_datadir}/doc/argyll
+%files -n udev-argyllcms
+%defattr(644,root,root,755)
+/lib/udev/rules.d/55-Argyll.rules
 
 %files doc
 %defattr(644,root,root,755)
