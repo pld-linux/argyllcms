@@ -3,7 +3,7 @@ Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
 Version:	1.3.5
 Release:	1
-License:	GPL v3 and MIT
+License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, GNU FDL 1.3
 Group:		X11/Applications/Graphics
 Source0:	http://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
 # Source0-md5:	e1c51b73cfbf309099340c73b5c4ad10
