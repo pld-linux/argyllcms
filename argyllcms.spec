@@ -1,12 +1,13 @@
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	1.3.5
+Version:	1.3.6
 Release:	1
-License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, GNU FDL 1.3
+License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
 Source0:	http://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
-# Source0-md5:	e1c51b73cfbf309099340c73b5c4ad10
+# Source0-md5:	a7d270585c822c98bc00eae5bdf2e04e
+Patch0:		%{name}-link.patch
 URL:		http://www.argyllcms.com/
 BuildRequires:	libtiff-devel
 BuildRequires:	libusb-devel >= 1.0.0
@@ -94,9 +95,11 @@ Argyll.
 
 %prep
 %setup -q -n h%{name}-%{version}
+%patch0 -p1
 
 %build
-%configure
+%configure \
+	--disable-static
 %{__make}
 
 %install
@@ -107,18 +110,26 @@ rm -rf $RPM_BUILD_ROOT
 # they shouldn't put Makefile.am to ref_DATA
 %{__rm} $RPM_BUILD_ROOT%{_datadir}/color/argyll/ref/Makefile.am
 
+# no -devel package (headers not exported)
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/lib*.{so,la}
+
+# packaged as %doc
 %{__rm} -r $RPM_BUILD_ROOT%{_docdir}/argyll
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS Readme.txt log.txt ttbd.txt
+%doc AUTHORS Readme.txt
 %attr(755,root,root) %{_bindir}/applycal
 %attr(755,root,root) %{_bindir}/average
 %attr(755,root,root) %{_bindir}/cb2ti3
 %attr(755,root,root) %{_bindir}/ccttest
+%attr(755,root,root) %{_bindir}/ccxxmake
 %attr(755,root,root) %{_bindir}/chartread
 %attr(755,root,root) %{_bindir}/collink
 %attr(755,root,root) %{_bindir}/colprof
@@ -160,6 +171,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/verify
 %attr(755,root,root) %{_bindir}/viewgam
 %attr(755,root,root) %{_bindir}/xicclu
+%attr(755,root,root) %{_libdir}/libargyll.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libargyll.so.0
+%attr(755,root,root) %{_libdir}/libargyllicc.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libargyllicc.so.0
+%attr(755,root,root) %{_libdir}/libargyllusb.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libargyllusb.so.0
 %dir %{_datadir}/color/argyll
 %{_datadir}/color/argyll/ref
 
