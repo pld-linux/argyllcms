@@ -1,12 +1,12 @@
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	1.4.0
+Version:	1.5.1
 Release:	1
 License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
 Source0:	http://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
-# Source0-md5:	0f1a00fbbd5c458e8791970b414f684f
+# Source0-md5:	d55d64d59dc4b30cb0990214b299c222
 URL:		http://www.argyllcms.com/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
@@ -24,6 +24,7 @@ BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xz
 BuildRequires:	yajl-devel
+Obsoletes:	udev-argyllcms
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -58,20 +59,6 @@ najszybszego dostępnego przenośnego 8-bitowego rastrowego silnika
 konwersji kolorów, a także obsługę szybkiej, dokładniej 16-bitowej
 konwersji. Podzbiór kolorów urządzeń można oglądać i porównywać przy
 użyciu przeglądarki VRML.
-
-%package -n udev-argyllcms
-Summary:	Udev rules for color measurement devices supported by Argyll CMS
-Summary(pl.UTF-8):	Reguły Udev dla urządzeń mierzących kolory obsługiwanych przez Argyll CMS
-Group:		Base
-Requires:	%{name} = %{version}-%{release}
-Requires:	udev-core
-
-%description -n udev-argyllcms
-Udev rules for color measurement devices supported by Argyll CMS.
-
-%description -n udev-argyllcms -l pl.UTF-8
-Reguły Udev dla urządzeń mierzących kolory obsługiwanych przez Argyll
-CMS.
 
 %package doc
 Summary:	Argyll CMS documentation
@@ -156,6 +143,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/mppcheck
 %attr(755,root,root) %{_bindir}/mpplu
 %attr(755,root,root) %{_bindir}/mppprof
+%attr(755,root,root) %{_bindir}/oeminst
 %attr(755,root,root) %{_bindir}/pathplot
 %attr(755,root,root) %{_bindir}/printcal
 %attr(755,root,root) %{_bindir}/printtarg
@@ -163,13 +151,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/refine
 %attr(755,root,root) %{_bindir}/revfix
 %attr(755,root,root) %{_bindir}/scanin
-%attr(755,root,root) %{_bindir}/sepgen
 %attr(755,root,root) %{_bindir}/simpprof
 %attr(755,root,root) %{_bindir}/spec2cie
 %attr(755,root,root) %{_bindir}/specplot
 %attr(755,root,root) %{_bindir}/splitti3
 %attr(755,root,root) %{_bindir}/spotread
-%attr(755,root,root) %{_bindir}/spyd2en
 %attr(755,root,root) %{_bindir}/synthcal
 %attr(755,root,root) %{_bindir}/synthread
 %attr(755,root,root) %{_bindir}/targen
@@ -182,14 +168,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libargyll.so.0
 %attr(755,root,root) %{_libdir}/libargyllicc.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libargyllicc.so.0
-%attr(755,root,root) %{_libdir}/libargyllusb.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libargyllusb.so.0
 %dir %{_datadir}/color/argyll
 %{_datadir}/color/argyll/ref
-
-%files -n udev-argyllcms
-%defattr(644,root,root,755)
-/lib/udev/rules.d/55-Argyll.rules
 
 %files doc
 %defattr(644,root,root,755)
