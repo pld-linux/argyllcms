@@ -1,12 +1,12 @@
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	1.6.2
+Version:	1.6.3
 Release:	1
 License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
 Source0:	http://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
-# Source0-md5:	6d503de144fff3f67b32aeab2e4ce104
+# Source0-md5:	f5952a715a61f0a0796122d78f202ccb
 URL:		http://www.argyllcms.com/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
@@ -128,6 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/chartread
 %attr(755,root,root) %{_bindir}/collink
 %attr(755,root,root) %{_bindir}/colprof
+%attr(755,root,root) %{_bindir}/colverify
 %attr(755,root,root) %{_bindir}/dispcal
 %attr(755,root,root) %{_bindir}/dispread
 %attr(755,root,root) %{_bindir}/dispwin
@@ -162,7 +163,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/targen
 %attr(755,root,root) %{_bindir}/tiffgamut
 %attr(755,root,root) %{_bindir}/txt2ti3
-%attr(755,root,root) %{_bindir}/verify
 %attr(755,root,root) %{_bindir}/viewgam
 %attr(755,root,root) %{_bindir}/xicclu
 %attr(755,root,root) %{_libdir}/libargyll.so.*.*.*
