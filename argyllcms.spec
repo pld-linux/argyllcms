@@ -1,16 +1,18 @@
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	1.6.3
+Version:	1.7.0
 Release:	1
 License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
 Source0:	http://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
-# Source0-md5:	f5952a715a61f0a0796122d78f202ccb
+# Source0-md5:	61de9f1604c3116acbedfb756f161c64
+Patch0:		%{name}-link.patch
 URL:		http://www.argyllcms.com/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	libjpeg-devel
+BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libtool >= 1:1.4.2
 BuildRequires:	libusb-devel >= 1.0.0
@@ -23,7 +25,6 @@ BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xz
-BuildRequires:	yajl-devel
 BuildRequires:	zlib-devel
 Obsoletes:	udev-argyllcms
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -86,6 +87,7 @@ Argyll.
 
 %prep
 %setup -q -n h%{name}-%{version}
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -123,6 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/applycal
 %attr(755,root,root) %{_bindir}/average
 %attr(755,root,root) %{_bindir}/cb2ti3
+%attr(755,root,root) %{_bindir}/cctiff
 %attr(755,root,root) %{_bindir}/ccttest
 %attr(755,root,root) %{_bindir}/ccxxmake
 %attr(755,root,root) %{_bindir}/chartread
@@ -136,10 +139,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/extractttag
 %attr(755,root,root) %{_bindir}/fakeCMY
 %attr(755,root,root) %{_bindir}/fakeread
+%attr(755,root,root) %{_bindir}/greytiff
 %attr(755,root,root) %{_bindir}/iccdump
 %attr(755,root,root) %{_bindir}/iccgamut
 %attr(755,root,root) %{_bindir}/icclu
 %attr(755,root,root) %{_bindir}/icctest
+%attr(755,root,root) %{_bindir}/illumread
 %attr(755,root,root) %{_bindir}/invprofcheck
 %attr(755,root,root) %{_bindir}/kodak2ti3
 %attr(755,root,root) %{_bindir}/mppcheck
@@ -169,6 +174,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libargyll.so.0
 %attr(755,root,root) %{_libdir}/libargyllicc.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libargyllicc.so.0
+%attr(755,root,root) %{_libdir}/libimdi.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libimdi.so.0
 %dir %{_datadir}/color/argyll
 %{_datadir}/color/argyll/ref
 
