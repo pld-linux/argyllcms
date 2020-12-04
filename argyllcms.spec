@@ -95,6 +95,7 @@ Argyll.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+export CFLAGS="%{rpmcflags} -fcommon"
 %configure \
 	--disable-static
 %{__make}
