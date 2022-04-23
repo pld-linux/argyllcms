@@ -1,30 +1,27 @@
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	1.9.2
+Version:	2.3.0
 Release:	1
 License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
-Source0:	https://people.freedesktop.org/~hughsient/releases/h%{name}-%{version}.tar.xz
-# Source0-md5:	49d71597286fd1b7ab575e5b17a7e307
-Patch0:		%{name}-link.patch
+Source0:	https://www.argyllcms.com/Argyll_V%{version}_src.zip
+# Source0-md5:	24216dad044d6b336d1a2bcb45fb5d6f
 URL:		http://www.argyllcms.com/
-BuildRequires:	autoconf >= 2.50
-BuildRequires:	automake >= 1:1.11
+BuildRequires:	jam
 BuildRequires:	libjpeg-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
-BuildRequires:	libtool >= 1:1.4.2
-BuildRequires:	libusb-devel >= 1.0.0
-BuildRequires:	pkgconfig
-BuildRequires:	tar >= 1:1.22
+BuildRequires:	linux-libc-headers
+BuildRequires:	openssl-devel
+BuildRequires:	unzip
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXScrnSaver-devel
 BuildRequires:	xorg-lib-libXext-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
-BuildRequires:	xz
+BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	zlib-devel
 Obsoletes:	udev-argyllcms
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -86,33 +83,19 @@ Ten pakiet zawiera dokumentację do systemu zarządzania kolorami
 Argyll.
 
 %prep
-%setup -q -n h%{name}-%{version}
-%patch0 -p1
+%setup -q -n Argyll_V%{version}
 
 %build
-%{__libtoolize}
-%{__aclocal} -I m4
-%{__autoconf}
-%{__autoheader}
-%{__automake}
-export CFLAGS="%{rpmcflags} -fcommon"
-%configure \
-	--disable-static
-%{__make}
+export CC="%{__cc}"
+export PREF_CCFLAGS="%{rpmcflags} %{rpmcppflags}"
+export PREF_LINKFLAGS="%{rpmldflags}"
+jam -fJambase %{_smp_mflags} -dx -sPREFIX="%{_prefix}" -sREFSUBDIR=share/color/argyll/ref  all
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install \
-	DESTDIR=$RPM_BUILD_ROOT
+jam -fJambase %{_smp_mflags} -dx -sPREFIX="%{_prefix}" -sDESTDIR=$RPM_BUILD_ROOT -sREFSUBDIR=share/color/argyll/ref  install
 
-# they shouldn't put Makefile.am to ref_DATA
-%{__rm} $RPM_BUILD_ROOT%{_datadir}/color/argyll/ref/Makefile.am
-
-# no -devel package (headers not exported)
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/lib*.{so,la}
-
-# packaged as %doc
-%{__rm} -r $RPM_BUILD_ROOT%{_docdir}/argyll
+%{__rm} $RPM_BUILD_ROOT%{_prefix}/bin/License.txt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -122,17 +105,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS Readme.txt
+%doc Readme.txt
 %attr(755,root,root) %{_bindir}/applycal
 %attr(755,root,root) %{_bindir}/average
 %attr(755,root,root) %{_bindir}/cb2ti3
 %attr(755,root,root) %{_bindir}/cctiff
-%attr(755,root,root) %{_bindir}/ccttest
 %attr(755,root,root) %{_bindir}/ccxxmake
 %attr(755,root,root) %{_bindir}/chartread
 %attr(755,root,root) %{_bindir}/collink
 %attr(755,root,root) %{_bindir}/colprof
 %attr(755,root,root) %{_bindir}/colverify
+%attr(755,root,root) %{_bindir}/cxf2ti3
 %attr(755,root,root) %{_bindir}/dispcal
 %attr(755,root,root) %{_bindir}/dispread
 %attr(755,root,root) %{_bindir}/dispwin
@@ -144,22 +127,21 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/iccdump
 %attr(755,root,root) %{_bindir}/iccgamut
 %attr(755,root,root) %{_bindir}/icclu
-%attr(755,root,root) %{_bindir}/icctest
+%attr(755,root,root) %{_bindir}/iccvcgt
 %attr(755,root,root) %{_bindir}/illumread
 %attr(755,root,root) %{_bindir}/invprofcheck
 %attr(755,root,root) %{_bindir}/kodak2ti3
+%attr(755,root,root) %{_bindir}/ls2ti3
 %attr(755,root,root) %{_bindir}/mppcheck
 %attr(755,root,root) %{_bindir}/mpplu
 %attr(755,root,root) %{_bindir}/mppprof
 %attr(755,root,root) %{_bindir}/oeminst
-%attr(755,root,root) %{_bindir}/pathplot
 %attr(755,root,root) %{_bindir}/printcal
 %attr(755,root,root) %{_bindir}/printtarg
 %attr(755,root,root) %{_bindir}/profcheck
 %attr(755,root,root) %{_bindir}/refine
 %attr(755,root,root) %{_bindir}/revfix
 %attr(755,root,root) %{_bindir}/scanin
-%attr(755,root,root) %{_bindir}/simpprof
 %attr(755,root,root) %{_bindir}/spec2cie
 %attr(755,root,root) %{_bindir}/specplot
 %attr(755,root,root) %{_bindir}/splitti3
@@ -168,15 +150,10 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/synthread
 %attr(755,root,root) %{_bindir}/targen
 %attr(755,root,root) %{_bindir}/tiffgamut
+%attr(755,root,root) %{_bindir}/timage
 %attr(755,root,root) %{_bindir}/txt2ti3
 %attr(755,root,root) %{_bindir}/viewgam
 %attr(755,root,root) %{_bindir}/xicclu
-%attr(755,root,root) %{_libdir}/libargyll.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libargyll.so.0
-%attr(755,root,root) %{_libdir}/libargyllicc.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libargyllicc.so.0
-%attr(755,root,root) %{_libdir}/libimdi.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libimdi.so.0
 %dir %{_datadir}/color/argyll
 %{_datadir}/color/argyll/ref
 
