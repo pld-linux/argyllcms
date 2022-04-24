@@ -1,0 +1,31 @@
+diff -ur Argyll_V2.3.0.orig/Jambase Argyll_V2.3.0/Jambase
+--- Argyll_V2.3.0.orig/Jambase	2021-12-23 23:37:07.000000000 +0100
++++ Argyll_V2.3.0/Jambase	2022-04-24 21:01:17.080866907 +0200
+@@ -1011,16 +1011,6 @@
+ 		HOSTTYPE = $(JAMUNAME[1]) ;
+ 	}
+ 
+-	if $(HOSTTYPE) = x86_64 
+-	 || $(HOSTTYPE) = x86_64-linux
+-	 || $(HOSTTYPE) = amd64 {
+-		ECHO "We're on a 64 bit host" ;
+-		HOST64     = true ;
+-		CCFLAGS	   += -m64 ;
+-		C++FLAGS   += -m64 ;
+-	}
+-
+-
+ 	# Hmm. Newer linux gcc ar defaults to no timestamps
+ 	# and introduces a new option to get old behaviour,
+ 	# breaking the dependency determination.
+diff -ur Argyll_V2.3.0.orig/Jamtop Argyll_V2.3.0/Jamtop
+--- Argyll_V2.3.0.orig/Jamtop	2021-12-23 23:37:07.000000000 +0100
++++ Argyll_V2.3.0/Jamtop	2022-04-24 21:01:08.610422555 +0200
+@@ -162,6 +162,7 @@
+ 			if  [ GLOB /usr/lib : lib$(lcase).so ] || [ GLOB /usr/lib : lib$(lcase).a ]
+ 			 || [ GLOB /usr/local/lib : lib$(lcase).so ] || [ GLOB /usr/local/lib : lib$(lcase).a ]
+ 			 || [ GLOB /usr/lib64 : lib$(lcase).so ] || [ GLOB /usr/lib64 : lib$(lcase).a ]
++			 || [ GLOB /usr/libx32 : lib$(lcase).so ] || [ GLOB /usr/libx32 : lib$(lcase).a ]
+ 			 || [ GLOB /usr/lib/x86_64-linux-gnu : lib$(lcase).so ]
+ 			 || [ GLOB /usr/lib/x86_64-linux-gnu : lib$(lcase).a ]
+ 	         || [ GLOB /usr/lib/i386-linux-gnu : lib$(lcase).so ]

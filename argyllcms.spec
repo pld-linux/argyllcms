@@ -7,6 +7,7 @@ License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
 Source0:	https://www.argyllcms.com/Argyll_V%{version}_src.zip
 # Source0-md5:	24216dad044d6b336d1a2bcb45fb5d6f
+Patch0:		x32.patch
 URL:		http://www.argyllcms.com/
 BuildRequires:	jam
 BuildRequires:	libjpeg-devel
@@ -84,6 +85,7 @@ Argyll.
 
 %prep
 %setup -q -n Argyll_V%{version}
+%patch0 -p1
 
 %build
 export CC="%{__cc}"
