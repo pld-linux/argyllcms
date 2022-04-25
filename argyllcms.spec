@@ -24,7 +24,7 @@ BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXxf86vm-devel
 BuildRequires:	xorg-proto-xproto-devel
 BuildRequires:	zlib-devel
-Obsoletes:	udev-argyllcms
+Obsoletes:	udev-argyllcms < 1.5.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
