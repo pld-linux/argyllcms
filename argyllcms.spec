@@ -85,7 +85,7 @@ Argyll.
 
 %prep
 %setup -q -n Argyll_V%{version}
-%patch0 -p1
+%patch -P0 -p1
 
 %build
 export CC="%{__cc}"
