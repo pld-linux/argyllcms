@@ -1,12 +1,12 @@
 Summary:	ICC compatible color management system
 Summary(pl.UTF-8):	System zarządzania kolorami kompatybilny z ICC
 Name:		argyllcms
-Version:	3.0.1
+Version:	3.4.1
 Release:	1
 License:	AGPL v3, MIT, GPL v2+, LGPL v2.1+, FDL v1.3
 Group:		X11/Applications/Graphics
 Source0:	https://www.argyllcms.com/Argyll_V%{version}_src.zip
-# Source0-md5:	faf8673e2f493c66edf5b90f0925eac7
+# Source0-md5:	1e0ab0d03557b8e96c2d494b1d8568fc
 Patch0:		x32.patch
 URL:		http://www.argyllcms.com/
 BuildRequires:	jam
@@ -97,9 +97,12 @@ jam -fJambase %{_smp_mflags} -dx -sPREFIX="%{_prefix}" -sREFSUBDIR=share/color/a
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_datadir}/metainfo
 jam -fJambase %{_smp_mflags} -dx -sPREFIX="%{_prefix}" -sDESTDIR=$RPM_BUILD_ROOT -sREFSUBDIR=share/color/argyll/ref  install
 
 %{__rm} $RPM_BUILD_ROOT%{_prefix}/bin/License.txt
+
+%{__mv} $RPM_BUILD_ROOT%{_prefix}/bin/com.argyllcms.metainfo.xml $RPM_BUILD_ROOT%{_datadir}/metainfo
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -109,7 +112,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc Readme.txt
+%doc ReadMe.txt
 %attr(755,root,root) %{_bindir}/applycal
 %attr(755,root,root) %{_bindir}/average
 %attr(755,root,root) %{_bindir}/cb2ti3
@@ -160,6 +163,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/xicclu
 %dir %{_datadir}/color/argyll
 %{_datadir}/color/argyll/ref
+%{_datadir}/metainfo/com.argyllcms.metainfo.xml
 
 %files doc
 %defattr(644,root,root,755)
