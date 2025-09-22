@@ -15,6 +15,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	linux-libc-headers
 BuildRequires:	openssl-devel
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	unzip
 BuildRequires:	xorg-lib-libX11-devel
 BuildRequires:	xorg-lib-libXScrnSaver-devel
@@ -66,6 +67,7 @@ Summary(pl.UTF-8):	Dokumentacja systemu Argyll CMS
 Group:		Documentation
 # Does not really make sense without Argyll CMS itself
 Requires:	%{name} = %{version}-%{release}
+BuildArch:	noarch
 
 %description doc
 The Argyll color management system supports accurate ICC profile
